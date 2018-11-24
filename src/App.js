@@ -43,8 +43,6 @@ componentWillMount () {
   }
 
   handleLogout() {
-    const provider = new firebase.auth.GoogleAuthProvider();
-
     firebase.auth().signOut()
       .then( result => console.log(`${result.user.email} se aha logueado exitosamente!`))
       .catch( error => console.log(`ERROR ${error.code}: ${error.message}`) );
