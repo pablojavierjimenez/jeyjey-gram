@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import firebase from 'firebase';
+// import FileUpload from 'FileUpload ';
 import logo from './logo.svg';
 import './App.css';
+import Fileupload from './FileUpload';
 
 class App extends Component {
 
@@ -55,6 +57,7 @@ componentWillMount () {
           <img className="App-user-avatar" src={this.state.user.photoURL} alt={this.state.user.displayName} />
           <p>Hola {this.state.user.displayName}!</p>
           <button onClick={this.handleLogout}>Salir</button>
+          <Fileupload />
         </div>
       );
     } else {
