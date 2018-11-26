@@ -10,30 +10,34 @@ class App extends Component {
   constructor () {
     super();
     this.state = {
-      user: null
+      user: null,
+      pictures: []
     };
 
     this.handleAuth = this.handleAuth.bind(this);
     this.handleLogout = this.handleLogout.bind(this);
-
+    this.handleUpload = this.handleUpload.bind(this);
   }
 
-componentWillMount () {
-  firebase.auth().onAuthStateChanged( user => {
-    // en ES6 si la clave y el valor se llaman igual se puede poner una vez
-    // es por eso que en lugar de tener esto
-    // user: user
-    // solo esta esto
-    // user
-    this.setState({
-      user
-    })
-  })
-}
+  componentWillMount () {
+    firebase.auth().onAuthStateChanged( user => {
+      // en ES6 si la clave y el valor se llaman igual se puede poner una vez
+      // es por eso que en lugar de tener esto
+      // user: user
+      // solo esta esto
+      // user
+      this.setState({
+        user
+      });
+    });
 
-  /**
-   *
-   */
+    firebase.database().ref('images').on('child_added', snapshot => {
+      this.setState({
+        pictures: this.state.pictures.concat( snapshot.val() )
+      })
+    })
+  }
+
   handleAuth () {
     const provider = new firebase.auth.GoogleAuthProvider();
 
@@ -57,7 +61,21 @@ componentWillMount () {
           <img className="App-user-avatar" src={this.state.user.photoURL} alt={this.state.user.displayName} />
           <p>Hola {this.state.user.displayName}!</p>
           <button onClick={this.handleLogout}>Salir</button>
-          <Fileupload />
+          <Fileupload onUpload={ this.handleUpload }/>
+          {
+            this.state.pictures.map( ( picture ) => {
+              console.log(picture)
+              return (
+                <div>
+                  <img width="320" src={picture.image} alt=""/>
+                  <br/>
+                  <img width="320" src={picture.photoURL} alt={picture.displayName} />
+                  <br/>
+                  <span>{picture.displayName}</span>
+                </div>
+              )
+            }).reverse()
+          }
         </div>
       );
     } else {
@@ -67,7 +85,41 @@ componentWillMount () {
     }
   }
 
+  handleUpload ( event ) {
+    const file = event.target.files[0];
+    const userFolderImages = this.state.user.displayName.toLocaleLowerCase().replace(/ /g, '-');
+    console.log('userName', userFolderImages);
+    const storageRef = firebase.storage().ref(`/images/${userFolderImages}/${file.name}`);
+    const uploadTask = storageRef.put(file);
 
+    uploadTask.on('state_changed', ( snapshot ) => {
+      console.log('snaptshot');
+      let porcentage = ( snapshot.bytestTransferred / snapshot.totalBytes ) * 100;
+      this.setState({
+        uploadValue: porcentage
+      });
+    }, error => {
+      console.log('error');
+      console.log(error.message);
+    }, () => {
+      console.log('on Complete');
+      uploadTask.snapshot.ref.getDownloadURL().then( (downloadURL) => {
+
+        const record = {
+          photoURL: this.state.user.photoURL,
+          displayName:this.state.user.displayName,
+          image: downloadURL
+        };
+
+        const dbRef = firebase.database().ref().child('images');
+
+        // dbRef.on('value', snap => console.log( snap.val() ) );
+        console.log(record);
+        dbRef.set(record);
+
+      });
+    });
+  }
 
 
 
