@@ -19,7 +19,7 @@
 
 .App-main {
   padding: 1vmin;
-  height: 88vh;
+  min-height: 88vh;
   color: #010a0b;
   background-color: cadetblue;
 }
