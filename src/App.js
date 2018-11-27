@@ -43,7 +43,8 @@ class App extends Component {
 
     firebase.auth().signInWithPopup(provider)
       .then( result => {
-        console.log(`${result.user} se aha logueado exitosamente!`)
+        console.log(`${result.user} se aha logueado exitosamente!`);
+        debugger;
       })
       .catch( error => console.log(`ERROR ${error.code}: ${error.message}`) );
   }
@@ -111,11 +112,16 @@ class App extends Component {
           image: downloadURL
         };
 
-        const dbRef = firebase.database().ref().child('images');
-
-        // dbRef.on('value', snap => console.log( snap.val() ) );
+        firebase.database().ref('images').set({
+          photoURL: this.state.user.photoURL,
+          displayName:this.state.user.displayName,
+          image: downloadURL
+        });
         console.log(record);
-        dbRef.set(record);
+
+        const dbRef = firebase.database().ref('images');
+        const newPicture = dbRef.push();
+        newPicture.set(record);
 
       });
     });
@@ -151,6 +157,13 @@ class App extends Component {
           si un link quieres encontrar
           a mi debes consultar
           soy el footer... soy el futer soy el footer soy el FOOTER!!!
+          <div>
+            Icons made by
+            <a href="https://www.flaticon.com/authors/dave-gandy" title="Dave Gandy">Dave Gandy</a>
+            from
+            <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a>
+            is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a>
+          </div>
         </p>
         </footer>
       </section>
