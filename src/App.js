@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import firebase from 'firebase';
 // import FileUpload from 'FileUpload ';
-import logo from './jjgram-social-outlined-logo.svg';
+// import logo from './jjgram-social-outlined-logo.svg';
+import logo from './51244-blue-grey-spiral-vector.svg';
 import './App.css';
 import Fileupload from './FileUpload';
 
@@ -18,6 +19,7 @@ class App extends Component {
     this.handleAuthLogin = this.handleAuthLogin.bind(this);
     this.handleLogout = this.handleLogout.bind(this);
     this.handleUpload = this.handleUpload.bind(this);
+    this.filterHashTagsFromPlainText = this.filterHashTagsFromPlainText.bind(this);
   }
 
   componentWillMount () {
@@ -64,7 +66,7 @@ class App extends Component {
             <img className="App-user-avatar" src={this.state.user.photoURL} alt={this.state.user.displayName} />
             <button onClick={this.handleLogout}>Salir</button>
           </div>
-          <p className="App-header-user-name">{this.state.user.displayName}</p>
+          <p className="App-header-user-name">{this.state.user.displayName.split(' ').shift()}</p>
         </span>
       );
     } else {
@@ -87,9 +89,20 @@ class App extends Component {
                     <img src={picture.photoURL} alt={picture.displayName} />
                     <span>{picture.displayName}</span>
                   </header>
-                  <img src={picture.image} alt=""/>
-                  <br/>
-                  <br/>
+                  <section className="App-article-content">
+                    <div className="App-article-imageContainer">
+                      <img src={picture.image} alt=""/>
+                    </div>
+                    <div className="App-article-dataContainer">
+                      <h4 className="App-article-tematicalTag">
+                        <span>#downTurnForWhat</span>
+                        <span>❤️</span>
+                      </h4>
+                      <p className="App-article-text">nana na na na</p>
+                      <div className="App-article-extraTags">#hola #mundo #etc</div>
+                      <section className="App-article-coments">hola turros</section>
+                    </div>
+                  </section>
                 </article>
               )
             }).reverse()
@@ -116,11 +129,18 @@ class App extends Component {
     }, () => {
       console.log('on Complete');
       uploadTask.snapshot.ref.getDownloadURL().then( (downloadURL) => {
-
+        var articleText = 'article-text #hola na na #como na na lider #estas';
+        var hashTaglist = this.filterHashTagsFromPlainText( articleText ).map( item => `#${item}` );
         const record = {
           photoURL: this.state.user.photoURL,
           displayName:this.state.user.displayName,
-          image: downloadURL
+          image: downloadURL,
+          articleData:{
+
+            tematicalTag: 'tematicalTag',
+            articleText: 'article-text na na na na lider',
+            extraTags: hashTaglist
+          }
         };
 
         const dbRef = firebase.database().ref('images');
@@ -131,7 +151,17 @@ class App extends Component {
     });
   }
 
+  filterHashTagsFromPlainText (inputText) {
+    var regex = /(?:^|\s)(?:#)([a-zA-Z\d]+)/gm;
+    var matches = [];
+    var match;
 
+    while ((match = regex.exec(inputText))) {
+        matches.push(match[1]);
+    }
+
+    return matches;
+  }
 
   render() {
     return (
@@ -139,7 +169,7 @@ class App extends Component {
         <header className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
           <p>
-            Jey Jey Gram
+            MyCollection
           </p>
           { this.headerHandleButton() }
         </header>
