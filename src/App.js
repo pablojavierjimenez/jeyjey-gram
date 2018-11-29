@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import firebase from 'firebase';
 // import FileUpload from 'FileUpload ';
-import logo from './logo.svg';
+import logo from './jjgram-social-outlined-logo.svg';
 import './App.css';
 import Fileupload from './FileUpload';
 
@@ -11,10 +11,11 @@ class App extends Component {
     super();
     this.state = {
       user: null,
+      isLogged: false,
       pictures: []
     };
 
-    this.handleAuth = this.handleAuth.bind(this);
+    this.handleAuthLogin = this.handleAuthLogin.bind(this);
     this.handleLogout = this.handleLogout.bind(this);
     this.handleUpload = this.handleUpload.bind(this);
   }
@@ -27,6 +28,7 @@ class App extends Component {
       // solo esta esto
       // user
       this.setState({
+        isLogged: ( user != null) ? true: false,
         user
       });
     });
@@ -38,13 +40,12 @@ class App extends Component {
     })
   }
 
-  handleAuth () {
+  handleAuthLogin () {
     const provider = new firebase.auth.GoogleAuthProvider();
 
     firebase.auth().signInWithPopup(provider)
       .then( result => {
         console.log(`${result.user} se aha logueado exitosamente!`);
-        debugger;
       })
       .catch( error => console.log(`ERROR ${error.code}: ${error.message}`) );
   }
@@ -55,46 +56,56 @@ class App extends Component {
       .catch( error => console.log(`ERROR ${error.code}: ${error.message}`) );
   }
 
+  headerHandleButton () {
+    if (this.state.isLogged) {
+      return (
+        <span>
+          <div className="App-header-logged">
+            <img className="App-user-avatar" src={this.state.user.photoURL} alt={this.state.user.displayName} />
+            <button onClick={this.handleLogout}>Salir</button>
+          </div>
+          <p className="App-header-user-name">{this.state.user.displayName}</p>
+        </span>
+      );
+    } else {
+      return (
+        <button className="App-header-login-btn" onClick={this.handleAuthLogin}>Login</button>
+      )
+    }
+  }
+
   renderLogInButton () {
-    if (this.state.user) {
+    if (this.state.isLogged) {
       return (
         <div className="App-logged">
-          <img className="App-user-avatar" src={this.state.user.photoURL} alt={this.state.user.displayName} />
-          <p>Hola {this.state.user.displayName}!</p>
-          <button onClick={this.handleLogout}>Salir</button>
           <Fileupload onUpload={ this.handleUpload }/>
           {
             this.state.pictures.map( ( picture ) => {
-              console.log(picture)
               return (
-                <div>
-                  <img width="320" src={picture.image} alt=""/>
+                <article className="App-article">
+                  <header className="App-articleHeader">
+                    <img src={picture.photoURL} alt={picture.displayName} />
+                    <span>{picture.displayName}</span>
+                  </header>
+                  <img src={picture.image} alt=""/>
                   <br/>
-                  <img width="320" src={picture.photoURL} alt={picture.displayName} />
                   <br/>
-                  <span>{picture.displayName}</span>
-                </div>
+                </article>
               )
             }).reverse()
           }
         </div>
       );
-    } else {
-      return (
-        <button onClick={this.handleAuth}>Login con Google</button>
-      )
     }
   }
 
   handleUpload ( event ) {
     const file = event.target.files[0];
     const userFolderImages = this.state.user.displayName.toLocaleLowerCase().replace(/ /g, '-');
-    console.log('userName', userFolderImages);
     const storageRef = firebase.storage().ref(`/images/${userFolderImages}/${file.name}`);
     const uploadTask = storageRef.put(file);
 
     uploadTask.on('state_changed', ( snapshot ) => {
-      console.log('snaptshot');
       let porcentage = ( snapshot.bytestTransferred / snapshot.totalBytes ) * 100;
       this.setState({
         uploadValue: porcentage
@@ -112,13 +123,6 @@ class App extends Component {
           image: downloadURL
         };
 
-        firebase.database().ref('images').set({
-          photoURL: this.state.user.photoURL,
-          displayName:this.state.user.displayName,
-          image: downloadURL
-        });
-        console.log(record);
-
         const dbRef = firebase.database().ref('images');
         const newPicture = dbRef.push();
         newPicture.set(record);
@@ -135,16 +139,9 @@ class App extends Component {
         <header className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
           <p>
-            Edit <code>src/App.js</code> and save to reload.
+            Jey Jey Gram
           </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
+          { this.headerHandleButton() }
         </header>
 
         <main className="App-main">
@@ -157,7 +154,7 @@ class App extends Component {
           si un link quieres encontrar
           a mi debes consultar
           soy el footer... soy el futer soy el footer soy el FOOTER!!!
-          <div>
+          <div className="icon_credits">
             Icons made by
             <a href="https://www.flaticon.com/authors/dave-gandy" title="Dave Gandy">Dave Gandy</a>
             from

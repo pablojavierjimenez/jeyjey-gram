@@ -17,12 +17,65 @@
   color: white;
 }
 
+.App-header-login-btn {
+  border: 1px solid #fdfdfd;
+  background-color: cadetblue;
+  padding: 1vmin;
+  border-radius: .6vmin;
+  font-weight: bold;
+  color: white;
+  font-size: medium;
+}
+.App-header-logged{
+  display: flex;
+  justify-content: space-between;
+}
+.App-user-avatar {
+    height: 6vmin;
+    width: 6vmin;
+    border-radius: 3vmin;
+    /* animation: App-logo-spin infinite 20s linear; */
+}
+.App-header-user-name {
+  padding: 0;
+  margin: 0;
+  font-size: smaller;
+}
 .App-main {
   padding: 1vmin;
   min-height: 88vh;
   color: #010a0b;
   background-color: cadetblue;
 }
+
+.App-article{
+  padding: 1vmin;
+  margin: 2vmin auto;
+  background-color: whitesmoke;
+  width: 80vw;
+  max-width: 760px;
+}
+.App-article > img {
+  width: 100%;
+}
+.App-articleHeader {
+  display: flex;
+    justify-content: space-between;
+    font-size: small;
+    padding: 2vmin 1vmin;
+    border-bottom: .2vmin solid lightgrey;
+    margin-bottom: 1vmin;
+}
+
+.App-articleHeader > img {
+  width: 100%;
+  height: 4vmin;
+  width: 4vmin;
+  border-radius: 2vmin;
+  border: .24vmin solid black;
+  box-shadow: 0 0 2vmin black;
+}
+
 .App-footer {
   background-color: #282c34;
   max-height: 6vh;
@@ -36,7 +89,9 @@
 .App-link {
   color: #61dafb;
 }
-
+.icon_credits {
+  display: none;
+}
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
