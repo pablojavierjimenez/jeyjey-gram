@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import firebase from 'firebase';
-// import FileUpload from 'FileUpload ';
-// import logo from './jjgram-social-outlined-logo.svg';
-import logo from './51244-blue-grey-spiral-vector.svg';
+import logo from './assets/51244-blue-grey-spiral-vector.svg';
 import './App.css';
+// Componenets
+import Header from './Components/header/header.component';
 import Fileupload from './FileUpload';
 
 class App extends Component {
@@ -166,6 +166,9 @@ class App extends Component {
   render() {
     return (
       <section className="App">
+        {
+          //<Header onHeaderHandleButton={this.headerHandleButton} />
+        }
         <header className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
           <p>
