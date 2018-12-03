@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import firebase from 'firebase';
+import store from './store';
 // import FileUpload from 'FileUpload ';
 import logo from './jjgram-social-outlined-logo.svg';
 import './App.css';
@@ -12,9 +13,17 @@ class App extends Component {
     this.state = {
       user: null,
       isLogged: false,
-      pictures: []
+      pictures: [],
+      like: []
     };
 
+    store.subscribe( () => {
+      this.setState({
+        like: store.getState().like
+      });
+      console.log('y quedo el like en', store.getState().like)
+    })
+    this.addToLike = this.addToLike.bind(this);
     this.handleAuthLogin = this.handleAuthLogin.bind(this);
     this.handleLogout = this.handleLogout.bind(this);
     this.handleUpload = this.handleUpload.bind(this);
@@ -90,6 +99,8 @@ class App extends Component {
                   <img src={picture.image} alt=""/>
                   <br/>
                   <br/>
+                  <span onClick={() => this.addToLike('pepe')} alt='like'>👍</span>
+                  <span onClick={() => this.addToLike('unLike')} alt='unlike'>👎</span>
                 </article>
               )
             }).reverse()
@@ -131,7 +142,12 @@ class App extends Component {
     });
   }
 
-
+  addToLike(product){
+    store.dispatch({
+      type: 'ADD_TO_LIKE',
+      product
+    })
+  }
 
   render() {
     return (
