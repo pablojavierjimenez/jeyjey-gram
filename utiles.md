@@ -31,3 +31,6 @@ asi que por favor coorobora que la configuracion de la base de datos este asi pr
     }
   }
 ```
+#### SCSS
+- tube que agregar por mi parte node-sass
+```npm install node-sass```

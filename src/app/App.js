@@ -1,10 +1,12 @@
+// Dependencies
 import React, { Component } from 'react';
 import firebase from 'firebase';
-import store from './store';
-// import FileUpload from 'FileUpload ';
-import logo from './jjgram-social-outlined-logo.svg';
-import './App.css';
-import Fileupload from './FileUpload';
+// Assets
+import logo from './assets/jjgram-social-outlined-logo.svg';
+import './App.scss';
+// App Components
+import store from './shared/store';
+import Fileupload from './Components/FileUpload';
 
 class App extends Component {
 
