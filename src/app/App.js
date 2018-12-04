@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import firebase from 'firebase';
 // Assets
-import logo from './assets/jjgram-social-outlined-logo.svg';
+import logo from './assets/spiral_mycollection.svg';
 import './App.scss';
 // App Components
 import store from './shared/store';
@@ -75,7 +75,7 @@ class App extends Component {
             <img className="App-user-avatar" src={this.state.user.photoURL} alt={this.state.user.displayName} />
             <button onClick={this.handleLogout}>Salir</button>
           </div>
-          <p className="App-header-user-name">{this.state.user.displayName}</p>
+          <p className="App-header-user-name">{this.state.user.displayName.split(' ').shift()}</p>
         </span>
       );
     } else {
@@ -98,11 +98,22 @@ class App extends Component {
                     <img src={picture.photoURL} alt={picture.displayName} />
                     <span>{picture.displayName}</span>
                   </header>
-                  <img src={picture.image} alt=""/>
-                  <br/>
-                  <br/>
-                  <span onClick={() => this.addToLike('pepe')} alt='like'>👍</span>
-                  <span onClick={() => this.addToLike('unLike')} alt='unlike'>👎</span>
+                  <section className="App-article-content">
+                    <div className="App-article-imageContainer">
+                      <img src={picture.image} alt=""/>
+                    </div>
+                    <div className="App-article-dataContainer">
+                      <h4 className="App-article-tematicalTag">
+                        <span>#downTurnForWhat</span>
+                        <span onClick={() => this.addToLike('pepe')} alt='like'>👍</span>
+                        <span onClick={() => this.addToLike('unLike')} alt='unlike'>👎</span>
+                        <span>❤️</span>
+                      </h4>
+                      <p className="App-article-text">nana na na na</p>
+                      <div className="App-article-extraTags">#hola #mundo #etc</div>
+                      <section className="App-article-coments">hola turros</section>
+                    </div>
+                  </section>
                 </article>
               )
             }).reverse()
@@ -149,6 +160,18 @@ class App extends Component {
       type: 'ADD_TO_LIKE',
       product
     })
+  }
+
+  filterHashTagsFromPlainText (inputText) {
+    var regex = /(?:^|\s)(?:#)([a-zA-Z\d]+)/gm;
+    var matches = [];
+    var match;
+
+    while ((match = regex.exec(inputText))) {
+        matches.push(match[1]);
+    }
+
+    return matches;
   }
 
   render() {
