@@ -2,7 +2,18 @@
 import React, { Component } from 'react';
 import firebase from 'firebase';
 // Assets
-import logo from './assets/spiral_mycollection.svg';
+// import logo from './assets/spiral_mycollection.svg';
+import logo from './assets/camera-icon.png';
+import icon_timeLine from './assets/outline-home-24px.svg';
+import icon_search from './assets/outline-search-24px.svg';
+import icon_userPerfil from './assets/outline-person_outline-24px.svg';
+import icon_favorite_empty from './assets/baseline-favorite_border-24px.svg';
+import icon_thumb_down_empty from './assets/outline-thumb_down-24px.svg';
+import icon_thumb_up_empty from './assets/outline-thumb_up-24px.svg';
+import icon_favorite_filled from './assets/baseline-favorite-24px.svg';
+import icon_thumb_down_filled from './assets/baseline-thumb_down-24px.svg';
+import icon_thumb_up_filled from './assets/baseline-thumb_up-24px.svg';
+
 import './App.scss';
 // App Components
 import store from './shared/store';
@@ -69,13 +80,16 @@ class App extends Component {
 
   headerHandleButton () {
     if (this.state.isLogged) {
+      let userNameToDisplay = `${this.state.user.displayName.split(' ').shift()} ${this.state.user.displayName.split(' ').pop()}`;
       return (
         <span>
-          <div className="App-header-logged">
-            <img className="App-user-avatar" src={this.state.user.photoURL} alt={this.state.user.displayName} />
-            <button onClick={this.handleLogout}>Salir</button>
+          <div className="App-header-logged tooltip">
+            <img className="App-user-avatar" src={this.state.user.photoURL} alt={userNameToDisplay} />
+            <span className="tooltiptext">
+              <p className="App-header-user-name">{userNameToDisplay}</p>
+              <button className="tooltip-bottom" onClick={this.handleLogout}>Salir</button>
+            </span>
           </div>
-          <p className="App-header-user-name">{this.state.user.displayName.split(' ').shift()}</p>
         </span>
       );
     } else {
@@ -89,7 +103,7 @@ class App extends Component {
     if (this.state.isLogged) {
       return (
         <div className="App-logged">
-          <Fileupload onUpload={ this.handleUpload }/>
+
           {
             this.state.pictures.map( ( picture ) => {
               return (
@@ -104,10 +118,20 @@ class App extends Component {
                     </div>
                     <div className="App-article-dataContainer">
                       <h4 className="App-article-tematicalTag">
-                        <span>#downTurnForWhat</span>
-                        <span onClick={() => this.addToLike('pepe')} alt='like'>👍</span>
-                        <span onClick={() => this.addToLike('unLike')} alt='unlike'>👎</span>
-                        <span>❤️</span>
+                        <span className="App-article-tematicalTag_title">
+                          #downTurnForWhat
+                        </span>
+                        <span className="App-article-tematicalTag_actions">
+                          <span onClick={() => this.addToLike('pepe')} alt='like'>
+                            <img src={icon_thumb_up_filled} className="App-icon_thumb_up_filled" alt="icon_thumb_up_filled" />
+                          </span>
+                          <span onClick={() => this.addToLike('unLike')} alt='unlike'>
+                            <img src={icon_thumb_down_empty} className="App-icon_thumb_down_filled" alt="icon_thumb_down_filled" />
+                          </span>
+                          <span>
+                            <img src={icon_favorite_filled} className="App-icon_favorite" alt="icon_favorite" />
+                          </span>
+                        </span>
                       </h4>
                       <p className="App-article-text">nana na na na</p>
                       <div className="App-article-extraTags">#hola #mundo #etc</div>
@@ -178,31 +202,37 @@ class App extends Component {
     return (
       <section className="App">
         <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Jey Jey Gram
-          </p>
-          { this.headerHandleButton() }
+          <span>
+            <img src={logo} className="App-logo" alt="logo" />
+            <span className="App-logo-brand">
+              myCollection
+            </span>
+          </span>
+          <span>
+            { this.headerHandleButton() }
+          </span>
         </header>
 
         <main className="App-main">
-          <h1>hola putos!</h1>
           { this.renderLogInButton() }
         </main>
 
         <footer className="App-footer">
-        <p>
-          si un link quieres encontrar
-          a mi debes consultar
-          soy el footer... soy el futer soy el footer soy el FOOTER!!!
-          <div className="icon_credits">
-            Icons made by
-            <a href="https://www.flaticon.com/authors/dave-gandy" title="Dave Gandy">Dave Gandy</a>
-            from
-            <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a>
-            is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a>
-          </div>
-        </p>
+          <span className="App-footerIcons">
+            <img src={icon_timeLine} className="App-icon_timeLine" alt="icon_timeLine" />
+          </span>
+          <span className="App-footerIcons">
+            <img src={icon_search} className="App-icon_search" alt="icon_search" />
+          </span>
+          <span className="App-footerIcons App-fileUpload_container">
+            <Fileupload onUpload={ this.handleUpload }/>
+          </span>
+          <span className="App-footerIcons">
+            <img src={icon_favorite_empty} className="App-icon_favorite_empty" alt="icon_favorite_empty" />
+          </span>
+          <span className="App-footerIcons">
+            <img src={icon_userPerfil} className="App-icon_userPerfil" alt="logo" />
+          </span>
         </footer>
       </section>
     );
