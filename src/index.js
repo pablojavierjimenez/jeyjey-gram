@@ -1,9 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { browserHistory } from 'react-router';
+
+
 import firebase from 'firebase';
 
 import './index.scss';
-import App from './app/App';
+import Routes from './app/routes';
 import * as serviceWorker from './app/serviceWorker';
 
 // Initialize Firebase
@@ -16,7 +19,10 @@ firebase.initializeApp({
   messagingSenderId: "1080625653128"
 });
 
-ReactDOM.render(<App />, document.getElementById('root'));
+ReactDOM.render(
+  <Routes history={ browserHistory } />,
+  document.getElementById('root')
+);
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.

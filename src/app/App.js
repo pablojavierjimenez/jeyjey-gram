@@ -1,5 +1,6 @@
 // Dependencies
 import React, { Component } from 'react';
+import { Link }  from 'react-router';
 import firebase from 'firebase';
 // Assets
 import logo from './assets/camera-icon.png';
@@ -18,6 +19,7 @@ import './App.scss';
 import store from './shared/store';
 import Footer from './Components/footer/footer-component';
 import Fileupload from './Components/FileUpload';
+import { timingSafeEqual } from 'crypto';
 
 class App extends Component {
 
@@ -207,6 +209,8 @@ class App extends Component {
             <img src={logo} className="App-logo" alt="logo" />
             <span className="App-logo-brand">
               myCollection
+              <Link to="/">Home</Link>
+              <Link to="/user">User</Link>
             </span>
           </span>
           <span>
@@ -215,6 +219,7 @@ class App extends Component {
         </header>
 
         <main className="App-main">
+          { this.props.children }
           { this.renderLogInButton() }
         </main>
 
