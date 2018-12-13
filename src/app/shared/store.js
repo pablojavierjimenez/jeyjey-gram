@@ -1,13 +1,13 @@
 import { createStore } from 'redux';
 
 const reducer = (state, action) =>{
-  if ( action.type === "ADD_TO_LIKE") {
+  if ( action.type === "ADD_TO_USER") {
     return {
       ...state,
-      like: state.like.concat( action.product )
+      userData: state.userData.concat( action.userState )
     }
   }
   return state;
 }
 
-export default createStore(reducer, { like: [] });
+export default createStore(reducer, { userData: [] });

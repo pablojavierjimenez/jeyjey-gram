@@ -1,0 +1,47 @@
+/************/
+.App-footer {
+  background-color: var(--white);
+  padding: 1vmin 4vw;
+  height: 7vh;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 10px;
+  color: white;
+  position: fixed;
+  z-index: 10;
+  bottom: 0;
+  width: 100vw;
+  box-sizing: border-box;
+  max-width: 100vw;
+  box-shadow: 0px -2px 5px 0px #ccc;
+}
+.App-footerIcons {
+  flex-grow: 1;
+}
+.App-footerIcons.App-fileUpload_container {
+  flex-grow: 2;
+}
+.App-icon_addImage {
+  height: 6vh;
+}
+.App-fileUpload_upload__input {
+  display: none;
+}
+
+.inputfile + label {
+  font-size: 1.25em;
+  font-weight: 700;
+  color: white;
+  background-color: black;
+  display: inline-block;
+}
+
+.inputfile:focus + label,
+.inputfile + label:hover {
+  background-color: red;
+}
+
+.App-link {
+  color: #61dafb;
+}

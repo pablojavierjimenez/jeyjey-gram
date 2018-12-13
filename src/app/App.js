@@ -2,7 +2,6 @@
 import React, { Component } from 'react';
 import firebase from 'firebase';
 // Assets
-// import logo from './assets/spiral_mycollection.svg';
 import logo from './assets/camera-icon.png';
 import icon_timeLine from './assets/outline-home-24px.svg';
 import icon_search from './assets/outline-search-24px.svg';
@@ -13,10 +12,11 @@ import icon_thumb_up_empty from './assets/outline-thumb_up-24px.svg';
 import icon_favorite_filled from './assets/baseline-favorite-24px.svg';
 import icon_thumb_down_filled from './assets/baseline-thumb_down-24px.svg';
 import icon_thumb_up_filled from './assets/baseline-thumb_up-24px.svg';
-
 import './App.scss';
+
 // App Components
 import store from './shared/store';
+import Footer from './Components/footer/footer-component';
 import Fileupload from './Components/FileUpload';
 
 class App extends Component {
@@ -27,16 +27,16 @@ class App extends Component {
       user: null,
       isLogged: false,
       pictures: [],
-      like: []
+      userData: []
     };
 
     store.subscribe( () => {
       this.setState({
-        like: store.getState().like
+        userData: store.getState().userData
       });
-      console.log('y quedo el like en', store.getState().like)
+      console.log('y quedo el userData en', store.getState().userData)
     })
-    this.addToLike = this.addToLike.bind(this);
+    this.addToUser = this.addToUser.bind(this);
     this.handleAuthLogin = this.handleAuthLogin.bind(this);
     this.handleLogout = this.handleLogout.bind(this);
     this.handleUpload = this.handleUpload.bind(this);
@@ -53,6 +53,7 @@ class App extends Component {
         isLogged: ( user != null) ? true: false,
         user
       });
+      this.addToUser(user);
     });
 
     firebase.database().ref('images').on('child_added', snapshot => {
@@ -122,13 +123,13 @@ class App extends Component {
                           #downTurnForWhat
                         </span>
                         <span className="App-article-tematicalTag_actions">
-                          <span onClick={() => this.addToLike('pepe')} alt='like'>
+                          <span onClick={() => this.addToUser('pepe')} alt='like'>
                             <img src={icon_thumb_up_filled} className="App-icon_thumb_up_filled" alt="icon_thumb_up_filled" />
                           </span>
-                          <span onClick={() => this.addToLike('unLike')} alt='unlike'>
+                          <span onClick={() => this.addToUser('unLike')} alt='unlike'>
                             <img src={icon_thumb_down_empty} className="App-icon_thumb_down_filled" alt="icon_thumb_down_filled" />
                           </span>
-                          <span>
+                          <span onClick={() => this.addToUser(this.state.user)}>
                             <img src={icon_favorite_filled} className="App-icon_favorite" alt="icon_favorite" />
                           </span>
                         </span>
@@ -179,10 +180,10 @@ class App extends Component {
     });
   }
 
-  addToLike(product){
+  addToUser(userState){
     store.dispatch({
-      type: 'ADD_TO_LIKE',
-      product
+      type: 'ADD_TO_USER',
+      userState
     })
   }
 
@@ -217,23 +218,8 @@ class App extends Component {
           { this.renderLogInButton() }
         </main>
 
-        <footer className="App-footer">
-          <span className="App-footerIcons">
-            <img src={icon_timeLine} className="App-icon_timeLine" alt="icon_timeLine" />
-          </span>
-          <span className="App-footerIcons">
-            <img src={icon_search} className="App-icon_search" alt="icon_search" />
-          </span>
-          <span className="App-footerIcons App-fileUpload_container">
-            <Fileupload onUpload={ this.handleUpload }/>
-          </span>
-          <span className="App-footerIcons">
-            <img src={icon_favorite_empty} className="App-icon_favorite_empty" alt="icon_favorite_empty" />
-          </span>
-          <span className="App-footerIcons">
-            <img src={icon_userPerfil} className="App-icon_userPerfil" alt="logo" />
-          </span>
-        </footer>
+        <Footer userStateData={ this.state.user }/>
+
       </section>
     );
   }
