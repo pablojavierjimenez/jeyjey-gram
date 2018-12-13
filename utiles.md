@@ -34,3 +34,10 @@ asi que por favor coorobora que la configuracion de la base de datos este asi pr
 #### SCSS
 - tube que agregar por mi parte node-sass
 ```npm install node-sass```
+
+#### react-router
+la verdad es que ahy deveria estar andando, pero  luego tendroa que actualizarlo a la v4
+
+https://www.youtube.com/watch?v=fPgE67iLkns
+https://scotch.io/tutorials/routing-react-apps-the-complete-guide
+https://reacttraining.com/react-router/web/guides/quick-start
