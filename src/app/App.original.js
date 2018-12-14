@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import { Link }  from 'react-router';
 import firebase from 'firebase';
 // Assets
+import logo from './assets/camera-icon.png';
 import icon_timeLine from './assets/outline-home-24px.svg';
 import icon_search from './assets/outline-search-24px.svg';
 import icon_userPerfil from './assets/outline-person_outline-24px.svg';
@@ -16,8 +17,7 @@ import './App.scss';
 
 // App Components
 import store from './shared/store';
-import Header from './Components/Header/Header';
-import Footer from './Components/Footer/Footer-component';
+import Footer from './Components/footer/footer-component';
 import Fileupload from './Components/FileUpload';
 import { timingSafeEqual } from 'crypto';
 
@@ -27,7 +27,7 @@ class App extends Component {
     super();
     this.state = {
       user: null,
-      isUserLogged: false,
+      isLogged: false,
       pictures: [],
       userData: []
     };
@@ -38,7 +38,7 @@ class App extends Component {
       });
       console.log('y quedo el userData en', store.getState().userData)
     })
-    this.storeDispatch_addToUser = this.storeDispatch_addToUser.bind(this);
+    this.addToUser = this.addToUser.bind(this);
     this.handleAuthLogin = this.handleAuthLogin.bind(this);
     this.handleLogout = this.handleLogout.bind(this);
     this.handleUpload = this.handleUpload.bind(this);
@@ -52,10 +52,10 @@ class App extends Component {
       // solo esta esto
       // user
       this.setState({
-        isUserLogged: ( user != null) ? true : false,
+        isLogged: ( user != null) ? true: false,
         user
       });
-      this.storeDispatch_addToUser(user, this.state.isUserLogged);
+      this.addToUser(user);
     });
 
     firebase.database().ref('images').on('child_added', snapshot => {
@@ -82,7 +82,7 @@ class App extends Component {
   }
 
   headerHandleButton () {
-    if (this.state.isUserLogged) {
+    if (this.state.isLogged) {
       let userNameToDisplay = `${this.state.user.displayName.split(' ').shift()} ${this.state.user.displayName.split(' ').pop()}`;
       return (
         <span>
@@ -103,7 +103,7 @@ class App extends Component {
   }
 
   renderLogInButton () {
-    if (this.state.isUserLogged) {
+    if (this.state.isLogged) {
       return (
         <div className="App-logged">
           {
@@ -124,13 +124,13 @@ class App extends Component {
                           #downTurnForWhat
                         </span>
                         <span className="App-article-tematicalTag_actions">
-                          <span onClick={() => this.storeDispatch_addToUser('pepe')} alt='like'>
+                          <span onClick={() => this.addToUser('pepe')} alt='like'>
                             <img src={icon_thumb_up_filled} className="App-icon_thumb_up_filled" alt="icon_thumb_up_filled" />
                           </span>
-                          <span onClick={() => this.storeDispatch_addToUser('unLike')} alt='unlike'>
+                          <span onClick={() => this.addToUser('unLike')} alt='unlike'>
                             <img src={icon_thumb_down_empty} className="App-icon_thumb_down_filled" alt="icon_thumb_down_filled" />
                           </span>
-                          <span onClick={() => this.storeDispatch_addToUser(this.state.user)}>
+                          <span onClick={() => this.addToUser(this.state.user)}>
                             <img src={icon_favorite_filled} className="App-icon_favorite" alt="icon_favorite" />
                           </span>
                         </span>
@@ -181,18 +181,11 @@ class App extends Component {
     });
   }
 
-  storeDispatch_addToUser(userState, isUserLogged){
-
+  addToUser(userState){
     store.dispatch({
       type: 'ADD_TO_USER',
       userState
-    });
-
-    store.dispatch({
-      type: "ADD_IS_USER_LOGGED",
-      isUserLogged
     })
-
   }
 
   filterHashTagsFromPlainText (inputText) {
@@ -210,8 +203,19 @@ class App extends Component {
   render() {
     return (
       <section className="App">
-
-        <Header />
+        <header className="App-header">
+          <span>
+            <img src={logo} className="App-logo" alt="logo" />
+            <span className="App-logo-brand">
+              myCollection
+              <Link to="/">Home</Link>
+              <Link to="/user">User</Link>
+            </span>
+          </span>
+          <span>
+            { this.headerHandleButton() }
+          </span>
+        </header>
 
         <main className="App-main">
           { this.props.children }

@@ -8,7 +8,7 @@ import icon_search from '../../assets/outline-search-24px.svg';
 import icon_userPerfil from '../../assets/outline-person_outline-24px.svg';
 import icon_favorite_empty from '../../assets/baseline-favorite_border-24px.svg';
 
-import './_footer.scss';
+import './Footer.scss';
 
 // App Components
 import Fileupload from '../FileUpload';

@@ -7,7 +7,15 @@ const reducer = (state, action) =>{
       userData: state.userData.concat( action.userState )
     }
   }
+
+  if ( action.type === "ADD_IS_USER_LOGGED") {
+    return {
+      ...state,
+      isUserLogged: action.isUserLogged
+    }
+  }
+
   return state;
 }
 
-export default createStore(reducer, { userData: [] });
+export default createStore(reducer, { userData: [], isUserLogged: false});
